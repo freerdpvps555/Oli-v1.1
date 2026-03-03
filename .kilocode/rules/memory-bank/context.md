@@ -23,6 +23,7 @@
 - [x] Add clickable detail modal for each crude market (chart + extended stats)
 - [x] Improve main page UI (tabs, cards, modal) and fix header login link to use Next.js `Link`
 - [x] Add Thailand retail fuel types to refined products (Gasohol 91/95, Benzine 95, Diesel, E20, E85, LPG, NGV)
+- [x] Expand Thailand retail fuel list and show Thai retail prices in THB (add Diesel 95, B10, Premium, Premium 95 variants)
 - [x] Add real oil news feed via API (`/api/news` using GDELT) and make news cards link to source
 - [x] Add optional real WTI/Brent price fetch via API (`/api/prices`, requires `ALPHAVANTAGE_API_KEY`)
 - [x] Encrypt admin session cookie payload (AES-256-GCM; uses `SESSION_SECRET`)
@@ -59,6 +60,7 @@
 10. **Oil Types**: Tabbed view between crude markets and refined products
 11. **Market Details**: Click a crude market card to open a detail modal (bigger chart + extra stats)
 12. **Thailand Retail Fuels**: Added Thai fuel types to refined products tab (placeholder prices until a provider is wired)
+14. **Thailand Retail Pricing (THB)**: Thai retail items display in Thai Baht (฿) with unit labels
 13. **Update Interval Selector**: Update interval can be changed from the header (persists to `localStorage`)
 
 ### Admin Panel
@@ -96,3 +98,4 @@
 | 2026-03-03 | Fixed admin login, added Thai oil prices, added update interval settings |
 | 2026-03-03 | Added market detail modal, oil news section, refined product prices tab, and improved main UI |
 | 2026-03-03 | Added real news API, optional real WTI/Brent API, Thai retail fuel types, and encrypted session cookie |
+| 2026-03-03 | Expanded Thai retail fuel list (incl. Diesel 95/B10/Premium) and grouped THB vs USD refined products |
