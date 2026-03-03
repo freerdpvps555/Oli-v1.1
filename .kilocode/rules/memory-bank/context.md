@@ -15,6 +15,9 @@
 - [x] Create authentication system (login/logout)
 - [x] Create admin dashboard with 3 pages (Dashboard, Prices, Settings)
 - [x] Add Thai language support throughout the application
+- [x] Fix admin login (use hardcoded credentials instead of database)
+- [x] Add Thai oil prices (Thailand) to the market list
+- [x] Add ability to change update interval in admin settings
 
 ## Current Structure
 
@@ -36,19 +39,20 @@
 ## Features Implemented
 
 ### Main Page
-1. **Real-time Price Updates**: Simulated prices update every 3 seconds
-2. **10 Oil Markets**: WTI, Brent, Saudi Arabia, Russia, UAE, Korea, Singapore, Nigeria, Brazil, Canada
+1. **Real-time Price Updates**: Simulated prices update every 3 seconds (configurable)
+2. **11 Oil Markets**: WTI, Brent, Saudi Arabia, Russia, UAE, Korea, Singapore, Nigeria, Brazil, Canada, Thailand
 3. **Price Cards**: Show price, change %, 24h range, mini sparkline chart
 4. **Ticker**: Scrolling marquee of all prices
 5. **Statistics Summary**: Average, highest, lowest, most volatile
 6. **Pause/Resume**: Toggle for auto-updates
 7. **Login Button**: Link to admin login
+8. **Configurable Update Interval**: Change update frequency in admin settings
 
 ### Admin Panel
-1. **Login System**: Username/password authentication
-2. **Dashboard**: Overview statistics, recent prices table
-3. **Prices**: Market overview, price history table
-4. **Settings**: Profile info, system info, help section
+1. **Login System**: Username/password authentication (hardcoded: admin/admin123)
+2. **Dashboard**: Overview statistics, quick action links
+3. **Prices**: Market overview with 11 markets including Thailand
+4. **Settings**: Profile info, system info, update interval configuration
 5. **Protected Routes**: Only logged-in admins can access
 
 ### Database Schema
@@ -76,3 +80,4 @@
 |------|---------|
 | 2026-03-03 | Created Global Oil Price Monitor app |
 | 2026-03-03 | Added login system and admin dashboard with Thai language |
+| 2026-03-03 | Fixed admin login, added Thai oil prices, added update interval settings |
