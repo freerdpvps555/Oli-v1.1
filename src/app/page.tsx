@@ -121,7 +121,7 @@ function PriceCard({ oil, isUpdating }: { oil: OilPrice; isUpdating: boolean }) 
             color={oil.change >= 0 ? "#10b981" : oil.change < 0 ? "#ef4444" : "#6b7280"} 
           />
           <div className="text-right">
-            <p className="text-xs text-slate-400">24h Range</p>
+            <p className="text-xs text-slate-400">24ชม.</p>
             <p className="text-xs font-mono text-slate-300">
               ${oil.low24h.toFixed(2)} - ${oil.high24h.toFixed(2)}
             </p>
@@ -162,23 +162,23 @@ function StatsSummary({ prices }: { prices: OilPrice[] }) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
-        <p className="text-xs text-slate-400 mb-1">Average Price</p>
+        <p className="text-xs text-slate-400 mb-1">ราคาเฉลี่ย</p>
         <p className="font-jetbrains text-xl font-bold text-slate-100">${avgPrice.toFixed(2)}</p>
       </div>
       <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
-        <p className="text-xs text-slate-400 mb-1">Highest</p>
+        <p className="text-xs text-slate-400 mb-1">สูงสุด</p>
         <p className="font-jetbrains text-xl font-bold text-emerald-400 flex items-center gap-2">
           {highest.flag} ${highest.price.toFixed(2)}
         </p>
       </div>
       <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
-        <p className="text-xs text-slate-400 mb-1">Lowest</p>
+        <p className="text-xs text-slate-400 mb-1">ต่ำสุด</p>
         <p className="font-jetbrains text-xl font-bold text-red-400 flex items-center gap-2">
           {lowest.flag} ${lowest.price.toFixed(2)}
         </p>
       </div>
       <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
-        <p className="text-xs text-slate-400 mb-1">Most Volatile</p>
+        <p className="text-xs text-slate-400 mb-1">ผันผวนมากที่สุด</p>
         <p className="font-jetbrains text-xl font-bold text-amber-400 flex items-center gap-2">
           {mostChanged.flag} {Math.abs(mostChanged.changePercent).toFixed(2)}%
         </p>
@@ -247,17 +247,23 @@ export default function Home() {
               </div>
               <div>
                 <h1 className="font-outfit text-2xl font-bold bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
-                  Global Oil Price Monitor
+                  ราคาน้ำมันโลก
                 </h1>
-                <p className="text-xs text-slate-400">Live crude oil prices from major markets</p>
+                <p className="text-xs text-slate-400">ราคาน้ำมันดิบจากตลาดหลักทั่วโลก</p>
               </div>
             </div>
             
             <div className="flex items-center gap-4">
+              <a
+                href="/login"
+                className="px-4 py-2 rounded-lg text-sm font-medium bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 transition-all"
+              >
+                เข้าสู่ระบบ
+              </a>
               <div className="text-right hidden sm:block">
-                <p className="text-xs text-slate-400">Last updated</p>
+                <p className="text-xs text-slate-400">อัปเดตล่าสุด</p>
                 <p className="font-mono text-sm text-slate-300">
-                  {lastUpdate.toLocaleTimeString()}
+                  {lastUpdate.toLocaleTimeString('th-TH')}
                 </p>
               </div>
               <button
@@ -268,7 +274,7 @@ export default function Home() {
                     : "bg-slate-700/50 text-slate-300 border border-slate-600/50 hover:bg-slate-700"
                 }`}
               >
-                {isPaused ? "▶ Resume" : "⏸ Pause"}
+                {isPaused ? "▶ ดำเนินต่อ" : "⏸ หยุดชั่วคราว"}
               </button>
             </div>
           </div>
@@ -297,10 +303,10 @@ export default function Home() {
         {/* Footer */}
         <footer className="mt-12 pt-6 border-t border-slate-700/50 text-center">
           <p className="text-xs text-slate-500">
-            Prices are simulated for demonstration purposes. Data updates every 3 seconds.
+            ราคาเป็นการจำลองเพื่อวัตถุประสงค์ในการสาธิต ข้อมูลอัปเดตทุก 3 วินาที
           </p>
           <p className="text-xs text-slate-600 mt-2">
-            © 2026 Global Oil Price Monitor
+            © 2026 ราคาน้ำมันโลก
           </p>
         </footer>
       </div>
