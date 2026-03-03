@@ -28,6 +28,7 @@ const initialOilData: OilPrice[] = [
   { id: "nigeria", country: "NG", flag: "🇳🇬", name: "Bonke Light", price: 83.45, previousPrice: 83.45, change: 0, changePercent: 0, high24h: 84.80, low24h: 82.50, history: [82.80, 83.20, 83.60, 83.30, 83.80, 83.60, 83.45], lastUpdate: new Date() },
   { id: "brazil", country: "BR", flag: "🇧🇷", name: "Brazilian Crude", price: 71.25, previousPrice: 71.25, change: 0, changePercent: 0, high24h: 72.50, low24h: 70.80, history: [70.90, 71.20, 71.50, 71.30, 71.70, 71.50, 71.25], lastUpdate: new Date() },
   { id: "canada", country: "CA", flag: "🇨🇦", name: "Western Canadian", price: 64.80, previousPrice: 64.80, change: 0, changePercent: 0, high24h: 66.00, low24h: 64.20, history: [64.30, 64.60, 65.00, 64.70, 65.10, 64.90, 64.80], lastUpdate: new Date() },
+  { id: "thailand", country: "TH", flag: "🇹🇭", name: "Thai Crude Oil", price: 72.50, previousPrice: 72.50, change: 0, changePercent: 0, high24h: 73.80, low24h: 71.20, history: [71.80, 72.10, 72.40, 72.20, 72.60, 72.40, 72.50], lastUpdate: new Date() },
 ];
 
 function generatePriceMovement(price: number): number {
@@ -192,6 +193,18 @@ export default function Home() {
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [isPaused, setIsPaused] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  
+  // Initialize update interval from localStorage or default to 3 seconds
+  const [updateInterval, setUpdateInterval] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("oilPriceUpdateInterval");
+      if (saved) {
+        const interval = parseInt(saved, 10);
+        if (interval > 0) return interval;
+      }
+    }
+    return 3;
+  });
 
   const updatePrices = useCallback(() => {
     if (isPaused) return;
@@ -227,10 +240,10 @@ export default function Home() {
       setUpdatingId(randomId);
       updatePrices();
       setTimeout(() => setUpdatingId(null), 500);
-    }, 3000);
+    }, updateInterval * 1000);
 
     return () => clearInterval(interval);
-  }, [updatePrices, prices]);
+  }, [updatePrices, prices, updateInterval]);
 
   return (
     <main className="min-h-screen bg-[#0a0f1a] text-slate-100">
@@ -264,6 +277,12 @@ export default function Home() {
                 <p className="text-xs text-slate-400">อัปเดตล่าสุด</p>
                 <p className="font-mono text-sm text-slate-300">
                   {lastUpdate.toLocaleTimeString('th-TH')}
+                </p>
+              </div>
+              <div className="text-right hidden md:block">
+                <p className="text-xs text-slate-400">อัปเดตทุก</p>
+                <p className="font-mono text-sm text-amber-400">
+                  {updateInterval}วินาที
                 </p>
               </div>
               <button
@@ -303,7 +322,7 @@ export default function Home() {
         {/* Footer */}
         <footer className="mt-12 pt-6 border-t border-slate-700/50 text-center">
           <p className="text-xs text-slate-500">
-            ราคาเป็นการจำลองเพื่อวัตถุประสงค์ในการสาธิต ข้อมูลอัปเดตทุก 3 วินาที
+            ราคาเป็นการจำลองเพื่อวัตถุประสงค์ในการสาธิต ข้อมูลอัปเดตทุก {updateInterval} วินาที
           </p>
           <p className="text-xs text-slate-600 mt-2">
             © 2026 ราคาน้ำมันโลก

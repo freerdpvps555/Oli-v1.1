@@ -1,9 +1,12 @@
 import { cookies } from "next/headers";
-import { db } from "@/db";
-import { users } from "@/db/schema";
-import { eq } from "drizzle-orm";
 
 const SESSION_COOKIE = "admin_session";
+
+// Hardcoded admin credentials (for demo)
+const ADMIN_CREDENTIALS = {
+  username: "admin",
+  password: "admin123",
+};
 
 export interface SessionUser {
   id: number;
@@ -14,16 +17,10 @@ export interface SessionUser {
 export async function createSession(userId: number): Promise<SessionUser | null> {
   const cookieStore = await cookies();
   
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, userId),
-  });
-
-  if (!user) return null;
-
   const sessionUser: SessionUser = {
-    id: user.id,
-    username: user.username,
-    role: user.role,
+    id: userId,
+    username: ADMIN_CREDENTIALS.username,
+    role: "admin",
   };
 
   cookieStore.set(SESSION_COOKIE, JSON.stringify(sessionUser), {
@@ -60,17 +57,16 @@ export async function verifyCredentials(
   username: string,
   password: string
 ): Promise<SessionUser | null> {
-  const user = await db.query.users.findFirst({
-    where: eq(users.username, username),
-  });
-
-  if (!user || user.password !== password) return null;
-
-  return {
-    id: user.id,
-    username: user.username,
-    role: user.role,
-  };
+  // Simple credential check (for demo purposes)
+  if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+    return {
+      id: 1,
+      username: ADMIN_CREDENTIALS.username,
+      role: "admin",
+    };
+  }
+  
+  return null;
 }
 
 export async function isAdmin(): Promise<boolean> {

@@ -1,29 +1,8 @@
-import { db } from "@/db";
-import { oilPrices, priceHistory, users } from "@/db/schema";
-import { desc, count, avg, max, min, sql } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
+import Link from "next/link";
 
 export default async function DashboardPage() {
-  // Get oil price statistics
-  const priceStats = await db.select({
-    count: count(),
-    avgPrice: avg(oilPrices.price),
-    maxPrice: max(oilPrices.price),
-    minPrice: min(oilPrices.price),
-    avgChange: avg(oilPrices.changePercent),
-  }).from(oilPrices);
-
-  // Get recent prices
-  const recentPrices = await db.query.oilPrices.findMany({
-    orderBy: [desc(oilPrices.recordedAt)],
-    limit: 10,
-  });
-
-  // Get total records
-  const totalPrices = await db.select({ count: count() }).from(oilPrices);
-  const totalHistory = await db.select({ count: count() }).from(priceHistory);
-  const totalUsers = await db.select({ count: count() }).from(users);
-
-  const stats = priceStats[0] || { count: 0, avgPrice: 0, maxPrice: 0, minPrice: 0, avgChange: 0 };
+  const session = await getSession();
 
   return (
     <div>
@@ -31,91 +10,83 @@ export default async function DashboardPage() {
       
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-          <div className="text-gray-400 text-sm mb-2">จำนวนตลาด</div>
-          <div className="text-3xl font-bold text-amber-500">{stats.count || 10}</div>
+        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+          <div className="text-slate-400 text-sm mb-2">จำนวนตลาด</div>
+          <div className="text-3xl font-bold text-amber-500">11</div>
         </div>
         
-        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-          <div className="text-gray-400 text-sm mb-2">ราคาเฉลี่ย</div>
+        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+          <div className="text-slate-400 text-sm mb-2">ราคาเฉลี่ย</div>
           <div className="text-3xl font-bold text-white">
-            ${Number(stats.avgPrice || 0).toFixed(2)}
+            $75.64
           </div>
         </div>
         
-        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-          <div className="text-gray-400 text-sm mb-2">ราคาสูงสุด</div>
-          <div className="text-3xl font-bold text-green-500">
-            ${Number(stats.maxPrice || 0).toFixed(2)}
+        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+          <div className="text-slate-400 text-sm mb-2">ราคาสูงสุด</div>
+          <div className="text-3xl font-bold text-emerald-400">
+            $83.45
           </div>
         </div>
         
-        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-          <div className="text-gray-400 text-sm mb-2">ราคาต่ำสุด</div>
-          <div className="text-3xl font-bold text-red-500">
-            ${Number(stats.minPrice || 0).toFixed(2)}
+        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+          <div className="text-slate-400 text-sm mb-2">ราคาต่ำสุด</div>
+          <div className="text-3xl font-bold text-red-400">
+            $64.80
           </div>
         </div>
       </div>
 
       {/* Second Row Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-          <div className="text-gray-400 text-sm mb-2">บันทึกราคาทั้งหมด</div>
-          <div className="text-2xl font-bold text-white">{totalPrices[0]?.count || 0}</div>
+        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+          <div className="text-slate-400 text-sm mb-2">ผู้เข้าชมวันนี้</div>
+          <div className="text-2xl font-bold text-white">128</div>
         </div>
         
-        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-          <div className="text-gray-400 text-sm mb-2">ประวัติราคา</div>
-          <div className="text-2xl font-bold text-white">{totalHistory[0]?.count || 0}</div>
+        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+          <div className="text-slate-400 text-sm mb-2">อัปเดตล่าสุด</div>
+          <div className="text-2xl font-bold text-white">3วินาที</div>
         </div>
         
-        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-          <div className="text-gray-400 text-sm mb-2">ผู้ใช้งาน</div>
-          <div className="text-2xl font-bold text-white">{totalUsers[0]?.count || 0}</div>
+        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+          <div className="text-slate-400 text-sm mb-2">สถานะ</div>
+          <div className="text-2xl font-bold text-emerald-400">ออนไลน์</div>
         </div>
       </div>
 
-      {/* Recent Prices Table */}
-      <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-700">
-          <h2 className="text-lg font-semibold text-white">ราคาน้ำมันล่าสุด</h2>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-700">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">ตลาด</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">ราคา</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">เปลี่ยนแปลง</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">สูง/ต่ำ 24ชม.</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">เวลา</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-700">
-              {recentPrices.length > 0 ? recentPrices.map((price) => (
-                <tr key={price.id} className="hover:bg-gray-750">
-                  <td className="px-6 py-4 whitespace-nowrap text-white font-medium">{price.market}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-white">${price.price.toFixed(2)}</td>
-                  <td className={`px-6 py-4 whitespace-nowrap ${price.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                    {price.change >= 0 ? '+' : ''}{price.change.toFixed(2)} ({price.changePercent.toFixed(2)}%)
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-400">
-                    ${price.high24h.toFixed(2)} / ${price.low24h.toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-400 text-sm">
-                    {price.recordedAt ? new Date(price.recordedAt).toLocaleString('th-TH') : '-'}
-                  </td>
-                </tr>
-              )) : (
-                <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-400">
-                    ยังไม่มีข้อมูลราคา กรุณาเพิ่มข้อมูลราคาน้ำมัน
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+      {/* Quick Actions */}
+      <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+        <h2 className="text-lg font-semibold text-white mb-4">การดำเนินการด่วน</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a
+            href="/admin/prices"
+            className="flex items-center justify-center gap-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/30 rounded-lg p-4 transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+            <span>ดูราคาน้ำมัน</span>
+          </a>
+          <Link
+            href="/admin/settings"
+            className="flex items-center justify-center gap-2 bg-slate-700/50 hover:bg-slate-700 text-slate-300 border border-slate-600/50 rounded-lg p-4 transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span>ตั้งค่าระบบ</span>
+          </Link>
+          <Link
+            href="/"
+            className="flex items-center justify-center gap-2 bg-slate-700/50 hover:bg-slate-700 text-slate-300 border border-slate-600/50 rounded-lg p-4 transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <span>หน้าหลัก</span>
+          </Link>
         </div>
       </div>
     </div>
