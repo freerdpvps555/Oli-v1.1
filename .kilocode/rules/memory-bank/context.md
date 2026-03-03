@@ -1,87 +1,45 @@
-# Active Context: Next.js Starter Template
+# Active Context: Global Oil Price Monitor
 
 ## Current State
 
-**Template Status**: ✅ Ready for development
-
-The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. It's ready for AI-assisted expansion to build any type of application.
+**Project Status**: ✅ Live - Real-time oil price monitoring application deployed
 
 ## Recently Completed
 
-- [x] Base Next.js 16 setup with App Router
-- [x] TypeScript configuration with strict mode
-- [x] Tailwind CSS 4 integration
-- [x] ESLint configuration
-- [x] Memory bank documentation
-- [x] Recipe system for common features
+- [x] Create SPEC.md with detailed requirements
+- [x] Implement Global Oil Price Monitor application
+- [x] Add real-time price simulation (updates every 3 seconds)
+- [x] Style with dark theme using Tailwind CSS 4
+- [x] Pass typecheck and lint validation
 
 ## Current Structure
 
 | File/Directory | Purpose | Status |
 |----------------|---------|--------|
-| `src/app/page.tsx` | Home page | ✅ Ready |
-| `src/app/layout.tsx` | Root layout | ✅ Ready |
-| `src/app/globals.css` | Global styles | ✅ Ready |
-| `.kilocode/` | AI context & recipes | ✅ Ready |
+| `src/app/page.tsx` | Main oil price monitor UI | ✅ Complete |
+| `src/app/layout.tsx` | Root layout with fonts | ✅ Complete |
+| `src/app/globals.css` | Global styles + animations | ✅ Complete |
+| `SPEC.md` | Project specification | ✅ Complete |
 
-## Current Focus
+## Features Implemented
 
-The template is ready. Next steps depend on user requirements:
+1. **Real-time Price Updates**: Simulated prices update every 3 seconds
+2. **10 Oil Markets**: WTI, Brent, Saudi Arabia, Russia, UAE, Korea, Singapore, Nigeria, Brazil, Canada
+3. **Price Cards**: Show price, change %, 24h range, mini sparkline chart
+4. **Ticker**: Scrolling marquee of all prices
+5. **Statistics Summary**: Average, highest, lowest, most volatile
+6. **Pause/Resume**: Toggle for auto-updates
+7. **Visual Feedback**: Pulse animation on price updates
 
-1. What type of application to build
-2. What features are needed
-3. Design/branding preferences
+## Design
 
-## Quick Start Guide
-
-### To add a new page:
-
-Create a file at `src/app/[route]/page.tsx`:
-```tsx
-export default function NewPage() {
-  return <div>New page content</div>;
-}
-```
-
-### To add components:
-
-Create `src/components/` directory and add components:
-```tsx
-// src/components/ui/Button.tsx
-export function Button({ children }: { children: React.ReactNode }) {
-  return <button className="px-4 py-2 bg-blue-600 text-white rounded">{children}</button>;
-}
-```
-
-### To add a database:
-
-Follow `.kilocode/recipes/add-database.md`
-
-### To add API routes:
-
-Create `src/app/api/[route]/route.ts`:
-```tsx
-import { NextResponse } from "next/server";
-
-export async function GET() {
-  return NextResponse.json({ message: "Hello" });
-}
-```
-
-## Available Recipes
-
-| Recipe | File | Use Case |
-|--------|------|----------|
-| Add Database | `.kilocode/recipes/add-database.md` | Data persistence with Drizzle + SQLite |
-
-## Pending Improvements
-
-- [ ] Add more recipes (auth, email, etc.)
-- [ ] Add example components
-- [ ] Add testing setup recipe
+- Dark theme with amber/gold accent (oil color)
+- JetBrains Mono for prices, Outfit for headings
+- Responsive grid layout (1-4 columns)
+- Smooth animations and hover effects
 
 ## Session History
 
 | Date | Changes |
 |------|---------|
-| Initial | Template created with base setup |
+| 2026-03-03 | Created Global Oil Price Monitor app |
