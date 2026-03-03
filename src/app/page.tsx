@@ -9,6 +9,8 @@ interface OilPrice {
   flag: string;
   name: string;
   type: string;
+  currencySymbol?: string;
+  unitLabel?: string;
   price: number;
   previousPrice: number;
   change: number;
@@ -30,6 +32,7 @@ interface OilNews {
   time: string;
   tag: string;
   sentiment: "positive" | "negative" | "neutral";
+  url?: string;
 }
 
 const initialOilData: OilPrice[] = [
@@ -52,15 +55,19 @@ const refinedProducts: OilPrice[] = [
   { id: "heating", country: "US", flag: "🇺🇸", name: "Heating Oil", type: "Refined Product", price: 2.52, previousPrice: 2.52, change: 0, changePercent: 0, high24h: 2.60, low24h: 2.45, high52w: 3.10, low52w: 1.95, volume: "180K", openInterest: "240K", history: [2.48, 2.50, 2.53, 2.49, 2.51, 2.54, 2.52], lastUpdate: new Date() },
   { id: "jetfuel", country: "US", flag: "🇺🇸", name: "Jet Fuel", type: "Refined Product", price: 2.85, previousPrice: 2.85, change: 0, changePercent: 0, high24h: 2.95, low24h: 2.75, high52w: 3.60, low52w: 2.30, volume: "145K", openInterest: "190K", history: [2.80, 2.82, 2.87, 2.83, 2.84, 2.86, 2.85], lastUpdate: new Date() },
   { id: "propane", country: "US", flag: "🇺🇸", name: "Propane", type: "Refined Product", price: 0.92, previousPrice: 0.92, change: 0, changePercent: 0, high24h: 0.98, low24h: 0.88, high52w: 1.20, low52w: 0.65, volume: "95K", openInterest: "130K", history: [0.90, 0.91, 0.93, 0.89, 0.92, 0.94, 0.92], lastUpdate: new Date() },
+
+  // Thailand retail (placeholder values; wire to a real provider via API when available)
+  { id: "th-gasohol91", country: "TH", flag: "🇹🇭", name: "แก๊สโซฮอล์ 91", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 37.48, previousPrice: 37.48, change: 0, changePercent: 0, high24h: 37.80, low24h: 37.20, high52w: 44.00, low52w: 31.50, volume: "-", openInterest: "-", history: [37.40, 37.45, 37.46, 37.44, 37.47, 37.49, 37.48], lastUpdate: new Date() },
+  { id: "th-gasohol95", country: "TH", flag: "🇹🇭", name: "แก๊สโซฮอล์ 95", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 38.15, previousPrice: 38.15, change: 0, changePercent: 0, high24h: 38.50, low24h: 37.80, high52w: 45.00, low52w: 32.20, volume: "-", openInterest: "-", history: [38.10, 38.12, 38.18, 38.14, 38.13, 38.16, 38.15], lastUpdate: new Date() },
+  { id: "th-benzine95", country: "TH", flag: "🇹🇭", name: "เบนซิน 95", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 45.50, previousPrice: 45.50, change: 0, changePercent: 0, high24h: 45.80, low24h: 45.20, high52w: 52.00, low52w: 39.00, volume: "-", openInterest: "-", history: [45.40, 45.45, 45.52, 45.48, 45.47, 45.51, 45.50], lastUpdate: new Date() },
+  { id: "th-diesel", country: "TH", flag: "🇹🇭", name: "ดีเซล", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 32.94, previousPrice: 32.94, change: 0, changePercent: 0, high24h: 33.10, low24h: 32.70, high52w: 38.50, low52w: 29.00, volume: "-", openInterest: "-", history: [32.90, 32.92, 32.96, 32.93, 32.95, 32.94, 32.94], lastUpdate: new Date() },
+  { id: "th-e20", country: "TH", flag: "🇹🇭", name: "แก๊สโซฮอล์ E20", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 35.44, previousPrice: 35.44, change: 0, changePercent: 0, high24h: 35.80, low24h: 35.10, high52w: 42.00, low52w: 29.50, volume: "-", openInterest: "-", history: [35.38, 35.40, 35.46, 35.42, 35.45, 35.43, 35.44], lastUpdate: new Date() },
+  { id: "th-e85", country: "TH", flag: "🇹🇭", name: "แก๊สโซฮอล์ E85", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 33.19, previousPrice: 33.19, change: 0, changePercent: 0, high24h: 33.50, low24h: 32.90, high52w: 40.00, low52w: 27.80, volume: "-", openInterest: "-", history: [33.10, 33.15, 33.20, 33.18, 33.21, 33.19, 33.19], lastUpdate: new Date() },
+  { id: "th-lpg", country: "TH", flag: "🇹🇭", name: "LPG", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/กก.", price: 22.80, previousPrice: 22.80, change: 0, changePercent: 0, high24h: 23.10, low24h: 22.50, high52w: 30.00, low52w: 19.00, volume: "-", openInterest: "-", history: [22.70, 22.75, 22.82, 22.78, 22.80, 22.81, 22.80], lastUpdate: new Date() },
+  { id: "th-ngv", country: "TH", flag: "🇹🇭", name: "NGV", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/กก.", price: 18.59, previousPrice: 18.59, change: 0, changePercent: 0, high24h: 18.80, low24h: 18.30, high52w: 22.00, low52w: 16.00, volume: "-", openInterest: "-", history: [18.50, 18.55, 18.60, 18.58, 18.61, 18.59, 18.59], lastUpdate: new Date() },
 ];
 
-const initialNews: OilNews[] = [
-  { id: 1, title: "OPEC+ จะประชุมพิจารณาลดการผลิตน้ำมันเพิ่มเติม", source: "Reuters", time: "2 ชม. ที่แล้ว", tag: "OPEC+", sentiment: "positive" },
-  { id: 2, title: "ราคาน้ำมันดิบ WTI พุ่งสูงขึ้น 3% จากข้อมูลสต็อกน้ำมันสหรัฐฯ", source: "Bloomberg", time: "4 ชม. ที่แล้ว", tag: "ตลาด", sentiment: "positive" },
-  { id: 3, title: "จีนประกาศเป้าหมายนำเข้าน้ำมันลดลง 5% ในปี 2026", source: "CNBC", time: "6 ชม. ที่แล้ว", tag: "จีน", sentiment: "negative" },
-  { id: 4, title: "สงครามการค้าระหว่างสหรัฐฯ และยุโรปอาจกระทบอุปสงค์น้ำมัน", source: "Financial Times", time: "8 ชม. ที่แล้ว", tag: "เศรษฐกิจ", sentiment: "negative" },
-  { id: 5, title: "ประเทศไทยเตรียมลดภาษีน้ำมันเพื่อช่วยเหลือประชาชน", source: "Thai News", time: "10 ชม. ที่แล้ว", tag: "ประเทศไทย", sentiment: "neutral" },
-];
+const initialNews: OilNews[] = [];
 
 function generatePriceMovement(price: number): number {
   const volatility = 0.02;
@@ -210,6 +217,8 @@ function PriceCard({ oil, isUpdating, onClick }: { oil: OilPrice; isUpdating: bo
 
 function RefinedProductCard({ product, isUpdating }: { product: OilPrice; isUpdating: boolean }) {
   const trendColor = getTrendColor(product.change);
+  const currency = product.currencySymbol ?? "$";
+  const unit = product.unitLabel;
   
   return (
     <div 
@@ -231,14 +240,22 @@ function RefinedProductCard({ product, isUpdating }: { product: OilPrice; isUpda
           <span className={trendColor}>{getTrendIcon(product.change)} {Math.abs(product.changePercent).toFixed(2)}%</span>
         </div>
       </div>
-      <p className="font-jetbrains text-2xl font-bold text-slate-50">${product.price.toFixed(2)}</p>
+      <p className="font-jetbrains text-2xl font-bold text-slate-50">
+        {currency}{product.price.toFixed(2)}
+        {unit ? <span className="ml-2 text-xs font-normal text-slate-400">{unit}</span> : null}
+      </p>
     </div>
   );
 }
 
 function NewsCard({ news }: { news: OilNews }) {
   return (
-    <div className="p-4 rounded-xl bg-slate-800/30 border border-slate-700/30 hover:border-amber-500/30 transition-all cursor-pointer group">
+    <a
+      href={news.url || "#"}
+      target={news.url ? "_blank" : undefined}
+      rel={news.url ? "noreferrer" : undefined}
+      className="block p-4 rounded-xl bg-slate-800/30 border border-slate-700/30 hover:border-amber-500/30 transition-all cursor-pointer group"
+    >
       <div className="flex items-start justify-between gap-3 mb-2">
         <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getSentimentColor(news.sentiment)}`}>
           {news.tag}
@@ -249,13 +266,15 @@ function NewsCard({ news }: { news: OilNews }) {
         {news.title}
       </h4>
       <p className="text-xs text-slate-500 mt-2">{news.source}</p>
-    </div>
+    </a>
   );
 }
 
 function DetailModal({ oil, onClose }: { oil: OilPrice; onClose: () => void }) {
   const trendColor = getTrendColor(oil.change);
   const trendIcon = getTrendIcon(oil.change);
+  const currency = oil.currencySymbol ?? "$";
+  const unit = oil.unitLabel;
   
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -283,7 +302,10 @@ function DetailModal({ oil, onClose }: { oil: OilPrice; onClose: () => void }) {
           <div className="flex items-end justify-between">
             <div>
               <p className="text-sm text-slate-400 mb-1">ราคาปัจจุบัน</p>
-              <p className="font-jetbrains text-5xl font-bold text-slate-50">${oil.price.toFixed(2)}</p>
+              <p className="font-jetbrains text-5xl font-bold text-slate-50">
+                {currency}{oil.price.toFixed(2)}
+                {unit ? <span className="ml-3 text-sm font-normal text-slate-400">{unit}</span> : null}
+              </p>
               <p className={`text-lg font-mono mt-1 ${trendColor}`}>
                 {oil.change >= 0 ? "+" : ""}{oil.change.toFixed(2)} ({oil.changePercent >= 0 ? "+" : ""}{oil.changePercent.toFixed(2)}%) {trendIcon}
               </p>
@@ -417,18 +439,91 @@ export default function Home() {
     return 3;
   });
 
+  // Fetch real news (GDELT) via our API route
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/news", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as { items?: OilNews[] };
+        if (!cancelled && Array.isArray(data.items)) {
+          setNews(data.items);
+        }
+      } catch {
+        // Keep UI usable even when news fetch fails
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Fetch real commodity prices (WTI/Brent) when an API key is configured server-side.
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await fetch("/api/prices", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          items?: Array<{ id: string; price: number; previousPrice: number }>;
+        };
+
+        if (cancelled || !Array.isArray(data.items) || data.items.length === 0) return;
+
+        setPrices((prev) =>
+          prev.map((oil) => {
+            const match = data.items?.find((i) => i.id === oil.id);
+            if (!match) return oil;
+
+            const change = match.price - match.previousPrice;
+            const changePercent = (change / match.previousPrice) * 100;
+            return {
+              ...oil,
+              price: match.price,
+              previousPrice: match.previousPrice,
+              change: Math.round(change * 100) / 100,
+              changePercent: Math.round(changePercent * 100) / 100,
+              high24h: Math.max(oil.high24h, match.price),
+              low24h: Math.min(oil.low24h, match.price),
+              history: [...oil.history.slice(1), match.price],
+              lastUpdate: new Date(),
+            };
+          })
+        );
+      } catch {
+        // Keep UI usable when real-price fetch fails.
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleChangeInterval = (seconds: number) => {
+    setUpdateInterval(seconds);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("oilPriceUpdateInterval", seconds.toString());
+    }
+  };
+
   const updatePrices = useCallback(() => {
     if (isPaused) return;
 
     setPrices(prevPrices => {
       const updatedPrices = prevPrices.map(oil => {
         const newPrice = generatePriceMovement(oil.price);
-        const change = newPrice - oil.previousPrice;
-        const changePercent = (change / oil.previousPrice) * 100;
+        const prev = oil.price;
+        const change = newPrice - prev;
+        const changePercent = (change / prev) * 100;
         const newHistory = [...oil.history.slice(1), newPrice];
         
         return {
           ...oil,
+          previousPrice: prev,
           price: newPrice,
           change: Math.round(change * 100) / 100,
           changePercent: Math.round(changePercent * 100) / 100,
@@ -445,12 +540,14 @@ export default function Home() {
     setRefined(prevRefined => {
       return prevRefined.map(product => {
         const newPrice = generatePriceMovement(product.price);
-        const change = newPrice - product.previousPrice;
-        const changePercent = (change / product.previousPrice) * 100;
+        const prev = product.price;
+        const change = newPrice - prev;
+        const changePercent = (change / prev) * 100;
         const newHistory = [...product.history.slice(1), newPrice];
         
         return {
           ...product,
+          previousPrice: prev,
           price: newPrice,
           change: Math.round(change * 100) / 100,
           changePercent: Math.round(changePercent * 100) / 100,
@@ -512,9 +609,23 @@ export default function Home() {
               </div>
               <div className="text-right hidden md:block">
                 <p className="text-xs text-slate-400">อัปเดตทุก</p>
-                <p className="font-mono text-sm text-amber-400">
-                  {updateInterval}วินาที
-                </p>
+                <div className="flex items-center justify-end gap-2">
+                  <p className="font-mono text-sm text-amber-400">{updateInterval}วินาที</p>
+                  <select
+                    value={updateInterval}
+                    onChange={(e) => handleChangeInterval(Number(e.target.value))}
+                    className="text-xs bg-slate-800/60 border border-slate-700/60 rounded px-2 py-1 text-slate-200 focus:outline-none focus:border-amber-500/60"
+                    aria-label="เลือกช่วงเวลาอัปเดตราคา"
+                  >
+                    <option value={1}>1s</option>
+                    <option value={2}>2s</option>
+                    <option value={3}>3s</option>
+                    <option value={5}>5s</option>
+                    <option value={10}>10s</option>
+                    <option value={30}>30s</option>
+                    <option value={60}>60s</option>
+                  </select>
+                </div>
               </div>
               <button
                 onClick={() => setIsPaused(!isPaused)}
@@ -553,9 +664,13 @@ export default function Home() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-            {news.map(item => (
-              <NewsCard key={item.id} news={item} />
-            ))}
+            {news.length > 0 ? (
+              news.map((item) => <NewsCard key={item.id} news={item} />)
+            ) : (
+              <div className="col-span-full text-sm text-slate-500">
+                กำลังโหลดข่าวจริงจากแหล่งข้อมูล...
+              </div>
+            )}
           </div>
         </div>
 

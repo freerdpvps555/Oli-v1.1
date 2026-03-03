@@ -22,6 +22,10 @@
 - [x] Add refined product prices tab (Gasoline, Diesel, Heating Oil, Jet Fuel, Propane)
 - [x] Add clickable detail modal for each crude market (chart + extended stats)
 - [x] Improve main page UI (tabs, cards, modal) and fix header login link to use Next.js `Link`
+- [x] Add Thailand retail fuel types to refined products (Gasohol 91/95, Benzine 95, Diesel, E20, E85, LPG, NGV)
+- [x] Add real oil news feed via API (`/api/news` using GDELT) and make news cards link to source
+- [x] Add optional real WTI/Brent price fetch via API (`/api/prices`, requires `ALPHAVANTAGE_API_KEY`)
+- [x] Encrypt admin session cookie payload (AES-256-GCM; uses `SESSION_SECRET`)
 
 ## Current Structure
 
@@ -51,9 +55,11 @@
 6. **Pause/Resume**: Toggle for auto-updates
 7. **Login Button**: Link to admin login
 8. **Configurable Update Interval**: Change update frequency in admin settings
-9. **Oil News**: Mock news feed cards (Thai UI)
+9. **Oil News**: Real news feed (GDELT) via `/api/news` with clickable source links
 10. **Oil Types**: Tabbed view between crude markets and refined products
 11. **Market Details**: Click a crude market card to open a detail modal (bigger chart + extra stats)
+12. **Thailand Retail Fuels**: Added Thai fuel types to refined products tab (placeholder prices until a provider is wired)
+13. **Update Interval Selector**: Update interval can be changed from the header (persists to `localStorage`)
 
 ### Admin Panel
 1. **Login System**: Username/password authentication (hardcoded: admin/admin123)
@@ -89,3 +95,4 @@
 | 2026-03-03 | Added login system and admin dashboard with Thai language |
 | 2026-03-03 | Fixed admin login, added Thai oil prices, added update interval settings |
 | 2026-03-03 | Added market detail modal, oil news section, refined product prices tab, and improved main UI |
+| 2026-03-03 | Added real news API, optional real WTI/Brent API, Thai retail fuel types, and encrypted session cookie |
