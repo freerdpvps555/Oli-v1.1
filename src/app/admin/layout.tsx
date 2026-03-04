@@ -37,6 +37,12 @@ export default async function AdminLayout({
                   ราคาน้ำมัน
                 </Link>
                 <Link
+                  href="/admin/natural-gas"
+                  className="text-slate-300 hover:text-emerald-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  ก๊าซธรรมชาติ
+                </Link>
+                <Link
                   href="/admin/users"
                   className="text-slate-300 hover:text-amber-500 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                 >

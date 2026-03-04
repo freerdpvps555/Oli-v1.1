@@ -9,7 +9,7 @@ export default async function DashboardPage() {
       <h1 className="text-2xl font-bold text-white mb-8">ภาพรวมระบบ</h1>
       
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
           <div className="text-slate-400 text-sm mb-2">จำนวนตลาด</div>
           <div className="text-3xl font-bold text-amber-500">11</div>
@@ -35,10 +35,17 @@ export default async function DashboardPage() {
             $64.80
           </div>
         </div>
+
+        <div className="bg-slate-800/50 border border-emerald-500/30 rounded-xl p-6">
+          <div className="text-slate-400 text-sm mb-2">Henry Hub</div>
+          <div className="text-3xl font-bold text-emerald-400">
+            $2.85
+          </div>
+        </div>
       </div>
 
       {/* Second Row Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
           <div className="text-slate-400 text-sm mb-2">ผู้เข้าชมวันนี้</div>
           <div className="text-2xl font-bold text-white">128</div>
@@ -50,15 +57,72 @@ export default async function DashboardPage() {
         </div>
         
         <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+          <div className="text-slate-400 text-sm mb-2">ราคาก๊าซธรรมชาติ</div>
+          <div className="text-2xl font-bold text-emerald-400">$2.85</div>
+        </div>
+
+        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
           <div className="text-slate-400 text-sm mb-2">สถานะ</div>
           <div className="text-2xl font-bold text-emerald-400">ออนไลน์</div>
+        </div>
+      </div>
+
+      {/* System Info */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+          <h2 className="text-lg font-semibold text-white mb-4">ข้อมูลระบบ</h2>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-slate-400">เวอร์ชัน</span>
+              <span className="text-white font-medium">1.0.0</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-slate-400">สถานะ API</span>
+              <span className="text-emerald-400 font-medium">ปกติ</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-slate-400">ผู้ใช้งาน</span>
+              <span className="text-white font-medium">3</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-slate-400">แหล่งข้อมูล</span>
+              <span className="text-amber-400 font-medium">EIA, EPPO</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+          <h2 className="text-lg font-semibold text-white mb-4">การแจ้งเตือน</h2>
+          <div className="space-y-3">
+            <div className="flex items-start gap-3 p-3 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+              <div className="w-2 h-2 bg-emerald-400 rounded-full mt-2"></div>
+              <div>
+                <p className="text-white text-sm font-medium">ราคาน้ำมันอัปเดตแล้ว</p>
+                <p className="text-slate-400 text-xs">2 นาทีที่แล้ว</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
+              <div className="w-2 h-2 bg-cyan-400 rounded-full mt-2"></div>
+              <div>
+                <p className="text-white text-sm font-medium">ก๊าซธรรมชาติอัปเดตแล้ว</p>
+                <p className="text-slate-400 text-xs">5 นาทีที่แล้ว</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-3 bg-amber-500/10 rounded-lg border border-amber-500/20">
+              <div className="w-2 h-2 bg-amber-400 rounded-full mt-2"></div>
+              <div>
+                <p className="text-white text-sm font-medium">ข่าวสารใหม่ 5 ข่าว</p>
+                <p className="text-slate-400 text-xs">15 นาทีที่แล้ว</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Quick Actions */}
       <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
         <h2 className="text-lg font-semibold text-white mb-4">การดำเนินการด่วน</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <a
             href="/admin/prices"
             className="flex items-center justify-center gap-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/30 rounded-lg p-4 transition-colors"
@@ -67,6 +131,15 @@ export default async function DashboardPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
             <span>ดูราคาน้ำมัน</span>
+          </a>
+          <a
+            href="/admin/natural-gas"
+            className="flex items-center justify-center gap-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-lg p-4 transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span>ก๊าซธรรมชาติ</span>
           </a>
           <Link
             href="/admin/settings"
