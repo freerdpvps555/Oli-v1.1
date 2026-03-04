@@ -27,6 +27,16 @@
 - [x] Add real oil news feed via API (`/api/news` using GDELT) and make news cards link to source
 - [x] Add optional real WTI/Brent price fetch via API (`/api/prices`, requires `ALPHAVANTAGE_API_KEY`)
 - [x] Encrypt admin session cookie payload (AES-256-GCM; uses `SESSION_SECRET`)
+- [x] Add multi-language support (Thai, English, Chinese, Arabic, Japanese, Korean, Spanish, French)
+- [x] Add multi-currency support (USD, THB, EUR, GBP, JPY, CNY, KRW, INR, SGD, MYR, PHP, IDR)
+- [x] Add currency converter component with dropdown selector
+- [x] Add language selector dropdown in header
+- [x] Add price trend state for UI theme changes
+- [x] Add advertisement slots to main page
+- [x] Create public About page
+- [x] Create public Contact page with form
+- [x] Create public FAQ page with accordion
+- [x] Enhance admin settings page with language/currency settings, notifications, and data export/import
 
 ## Current Structure
 
@@ -40,7 +50,14 @@
 | `src/app/admin/dashboard/page.tsx` | Dashboard overview (Thai) | ✅ Complete |
 | `src/app/admin/prices/page.tsx` | Oil prices management (Thai) | ✅ Complete |
 | `src/app/admin/settings/page.tsx` | System settings (Thai) | ✅ Complete |
+| `src/app/about/page.tsx` | Public about page | ✅ Complete |
+| `src/app/contact/page.tsx` | Public contact page | ✅ Complete |
+| `src/app/faq/page.tsx` | Public FAQ page | ✅ Complete |
 | `src/lib/auth.ts` | Authentication utilities | ✅ Complete |
+| `src/lib/translations.ts` | Multi-language translations | ✅ Complete |
+| `src/lib/app-context.tsx` | App context provider | ✅ Complete |
+| `src/components/LanguageCurrencySelector.tsx` | Language & currency selectors | ✅ Complete |
+| `src/components/Advertisement.tsx` | Advertisement components | ✅ Complete |
 | `src/db/schema.ts` | Database schema | ✅ Complete |
 | `src/db/seed.ts` | Admin user seed script | ✅ Complete |
 | `SPEC.md` | Project specification | ✅ Complete |
@@ -99,3 +116,4 @@
 | 2026-03-03 | Added market detail modal, oil news section, refined product prices tab, and improved main UI |
 | 2026-03-03 | Added real news API, optional real WTI/Brent API, Thai retail fuel types, and encrypted session cookie |
 | 2026-03-03 | Expanded Thai retail fuel list (incl. Diesel 95/B10/Premium) and grouped THB vs USD refined products |
+| 2026-03-04 | Added multi-language support (8 languages), multi-currency support, language/currency selectors, advertisement slots, public pages (About, Contact, FAQ), and enhanced admin settings |

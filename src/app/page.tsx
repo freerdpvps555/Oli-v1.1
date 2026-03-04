@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
+import { useApp } from "@/lib/app-context";
+import { SettingsPanel } from "@/components/LanguageCurrencySelector";
+import { AdBanner, AdSlot } from "@/components/Advertisement";
 
 interface OilPrice {
   id: string;
@@ -159,8 +162,12 @@ function LargeSparkline({ data, color }: { data: number[]; color: string }) {
 }
 
 function PriceCard({ oil, isUpdating, onClick }: { oil: OilPrice; isUpdating: boolean; onClick: () => void }) {
+  const { currency, convertPrice, t } = useApp();
   const trendColor = getTrendColor(oil.change);
   const trendBg = getTrendBg(oil.change);
+  const displayPrice = useMemo(() => convertPrice(oil.price), [convertPrice, oil.price]);
+  const displayHigh = useMemo(() => convertPrice(oil.high24h), [convertPrice, oil.high24h]);
+  const displayLow = useMemo(() => convertPrice(oil.low24h), [convertPrice, oil.low24h]);
   
   return (
     <button 
@@ -186,7 +193,7 @@ function PriceCard({ oil, isUpdating, onClick }: { oil: OilPrice; isUpdating: bo
 
         <div className="mb-4">
           <p className="font-jetbrains text-3xl font-bold text-slate-50">
-            ${oil.price.toFixed(2)}
+            {currency.symbol}{displayPrice.toFixed(2)}
           </p>
           <p className={`text-sm font-mono ${trendColor}`}>
             {oil.change >= 0 ? "+" : ""}{oil.change.toFixed(2)} ({oil.changePercent >= 0 ? "+" : ""}{oil.changePercent.toFixed(2)}%)
@@ -199,9 +206,9 @@ function PriceCard({ oil, isUpdating, onClick }: { oil: OilPrice; isUpdating: bo
             color={oil.change >= 0 ? "#10b981" : oil.change < 0 ? "#ef4444" : "#6b7280"} 
           />
           <div className="text-right">
-            <p className="text-xs text-slate-400">24ชม.</p>
+            <p className="text-xs text-slate-400">{t.price24h}</p>
             <p className="text-xs font-mono text-slate-300">
-              ${oil.low24h.toFixed(2)} - ${oil.high24h.toFixed(2)}
+              {currency.symbol}{displayLow.toFixed(2)} - {currency.symbol}{displayHigh.toFixed(2)}
             </p>
           </div>
         </div>
@@ -211,9 +218,9 @@ function PriceCard({ oil, isUpdating, onClick }: { oil: OilPrice; isUpdating: bo
 }
 
 function RefinedProductCard({ product, isUpdating }: { product: OilPrice; isUpdating: boolean }) {
+  const { currency, convertPrice, t } = useApp();
   const trendColor = getTrendColor(product.change);
-  const currency = product.currencySymbol ?? "$";
-  const unit = product.unitLabel;
+  const displayPrice = useMemo(() => convertPrice(product.price), [convertPrice, product.price]);
   
   return (
     <div 
@@ -239,8 +246,8 @@ function RefinedProductCard({ product, isUpdating }: { product: OilPrice; isUpda
         </div>
       </div>
       <p className="font-jetbrains text-2xl font-bold text-slate-50">
-        {currency}{product.price.toFixed(2)}
-        {unit ? <span className="ml-2 text-xs font-normal text-slate-400">{unit}</span> : null}
+        {currency.symbol}{displayPrice.toFixed(2)}
+        {product.unitLabel ? <span className="ml-2 text-xs font-normal text-slate-400">{product.unitLabel}</span> : null}
       </p>
     </div>
   );
@@ -269,10 +276,14 @@ function NewsCard({ news }: { news: OilNews }) {
 }
 
 function DetailModal({ oil, onClose }: { oil: OilPrice; onClose: () => void }) {
+  const { currency, convertPrice, t } = useApp();
   const trendColor = getTrendColor(oil.change);
   const trendIcon = getTrendIcon(oil.change);
-  const currency = oil.currencySymbol ?? "$";
-  const unit = oil.unitLabel;
+  const displayPrice = useMemo(() => convertPrice(oil.price), [convertPrice, oil.price]);
+  const displayHigh24 = useMemo(() => convertPrice(oil.high24h), [convertPrice, oil.high24h]);
+  const displayLow24 = useMemo(() => convertPrice(oil.low24h), [convertPrice, oil.low24h]);
+  const displayHigh52 = useMemo(() => convertPrice(oil.high52w), [convertPrice, oil.high52w]);
+  const displayLow52 = useMemo(() => convertPrice(oil.low52w), [convertPrice, oil.low52w]);
   
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -299,24 +310,24 @@ function DetailModal({ oil, onClose }: { oil: OilPrice; onClose: () => void }) {
           {/* Price Section */}
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-sm text-slate-400 mb-1">ราคาปัจจุบัน</p>
+              <p className="text-sm text-slate-400 mb-1">{t.currentPrice}</p>
               <p className="font-jetbrains text-5xl font-bold text-slate-50">
-                {currency}{oil.price.toFixed(2)}
-                {unit ? <span className="ml-3 text-sm font-normal text-slate-400">{unit}</span> : null}
+                {currency.symbol}{displayPrice.toFixed(2)}
+                {oil.unitLabel ? <span className="ml-3 text-sm font-normal text-slate-400">{oil.unitLabel}</span> : null}
               </p>
               <p className={`text-lg font-mono mt-1 ${trendColor}`}>
                 {oil.change >= 0 ? "+" : ""}{oil.change.toFixed(2)} ({oil.changePercent >= 0 ? "+" : ""}{oil.changePercent.toFixed(2)}%) {trendIcon}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-slate-400">อัปเดตล่าสุด</p>
+              <p className="text-sm text-slate-400">{t.lastUpdated}</p>
               <p className="font-mono text-slate-300">{oil.lastUpdate.toLocaleTimeString('th-TH')}</p>
             </div>
           </div>
 
           {/* Chart */}
           <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-700/30">
-            <p className="text-sm text-slate-400 mb-3">แนวโน้มราคา (7 วัน)</p>
+            <p className="text-sm text-slate-400 mb-3">{t.priceHistory}</p>
             <LargeSparkline 
               data={oil.history} 
               color={oil.change >= 0 ? "#10b981" : oil.change < 0 ? "#ef4444" : "#6b7280"} 
@@ -326,31 +337,31 @@ function DetailModal({ oil, onClose }: { oil: OilPrice; onClose: () => void }) {
           {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="p-3 rounded-xl bg-slate-700/30 border border-slate-600/30">
-              <p className="text-xs text-slate-400 mb-1">24 ชม. สูง</p>
-              <p className="font-mono text-emerald-400 font-semibold">${oil.high24h.toFixed(2)}</p>
+              <p className="text-xs text-slate-400 mb-1">{t.price24h} {t.high}</p>
+              <p className="font-mono text-emerald-400 font-semibold">{currency.symbol}{displayHigh24.toFixed(2)}</p>
             </div>
             <div className="p-3 rounded-xl bg-slate-700/30 border border-slate-600/30">
-              <p className="text-xs text-slate-400 mb-1">24 ชม. ต่ำ</p>
-              <p className="font-mono text-red-400 font-semibold">${oil.low24h.toFixed(2)}</p>
+              <p className="text-xs text-slate-400 mb-1">{t.price24h} {t.low}</p>
+              <p className="font-mono text-red-400 font-semibold">{currency.symbol}{displayLow24.toFixed(2)}</p>
             </div>
             <div className="p-3 rounded-xl bg-slate-700/30 border border-slate-600/30">
-              <p className="text-xs text-slate-400 mb-1">52W สูง</p>
-              <p className="font-mono text-amber-400 font-semibold">${oil.high52w.toFixed(2)}</p>
+              <p className="text-xs text-slate-400 mb-1">{t.high52w}</p>
+              <p className="font-mono text-amber-400 font-semibold">{currency.symbol}{displayHigh52.toFixed(2)}</p>
             </div>
             <div className="p-3 rounded-xl bg-slate-700/30 border border-slate-600/30">
-              <p className="text-xs text-slate-400 mb-1">52W ต่ำ</p>
-              <p className="font-mono text-slate-400 font-semibold">${oil.low52w.toFixed(2)}</p>
+              <p className="text-xs text-slate-400 mb-1">{t.low52w}</p>
+              <p className="font-mono text-slate-400 font-semibold">{currency.symbol}{displayLow52.toFixed(2)}</p>
             </div>
           </div>
 
           {/* Additional Info */}
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3 rounded-xl bg-slate-700/30 border border-slate-600/30">
-              <p className="text-xs text-slate-400 mb-1">ปริมาณการซื้อขาย</p>
+              <p className="text-xs text-slate-400 mb-1">{t.volume}</p>
               <p className="font-mono text-slate-200">{oil.volume}</p>
             </div>
             <div className="p-3 rounded-xl bg-slate-700/30 border border-slate-600/30">
-              <p className="text-xs text-slate-400 mb-1">Open Interest</p>
+              <p className="text-xs text-slate-400 mb-1">{t.openInterest}</p>
               <p className="font-mono text-slate-200">{oil.openInterest}</p>
             </div>
           </div>
@@ -361,52 +372,71 @@ function DetailModal({ oil, onClose }: { oil: OilPrice; onClose: () => void }) {
 }
 
 function Ticker({ prices }: { prices: OilPrice[] }) {
+  const { currency, convertPrice, t } = useApp();
+  
   return (
     <div className="overflow-hidden bg-slate-900/80 border-y border-slate-700/50 py-2">
       <div className="flex animate-scroll gap-8">
-        {[...prices, ...prices].map((oil, index) => (
-          <div key={`${oil.id}-${index}`} className="flex items-center gap-2 whitespace-nowrap">
-            <span>{oil.flag}</span>
-            <span className="font-mono text-sm text-slate-300">{oil.name}</span>
-            <span className={`font-mono text-sm font-semibold ${getTrendColor(oil.change)}`}>
-              ${oil.price.toFixed(2)}
-            </span>
-            <span className={`text-xs ${getTrendColor(oil.change)}`}>
-              {getTrendIcon(oil.change)} {Math.abs(oil.changePercent).toFixed(2)}%
-            </span>
-          </div>
-        ))}
+        {[...prices, ...prices].map((oil, index) => {
+          const displayPrice = convertPrice(oil.price);
+          return (
+            <div key={`${oil.id}-${index}`} className="flex items-center gap-2 whitespace-nowrap">
+              <span>{oil.flag}</span>
+              <span className="font-mono text-sm text-slate-300">{oil.name}</span>
+              <span className={`font-mono text-sm font-semibold ${getTrendColor(oil.change)}`}>
+                {currency.symbol}{displayPrice.toFixed(2)}
+              </span>
+              <span className={`text-xs ${getTrendColor(oil.change)}`}>
+                {getTrendIcon(oil.change)} {Math.abs(oil.changePercent).toFixed(2)}%
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
 function StatsSummary({ prices }: { prices: OilPrice[] }) {
-  const avgPrice = prices.reduce((sum, p) => sum + p.price, 0) / prices.length;
-  const highest = prices.reduce((max, p) => p.price > max.price ? p : max, prices[0]);
-  const lowest = prices.reduce((min, p) => p.price < min.price ? p : min, prices[0]);
-  const mostChanged = prices.reduce((max, p) => Math.abs(p.changePercent) > Math.abs(max.changePercent) ? p : max, prices[0]);
+  const { currency, convertPrice, t } = useApp();
+  
+  const avgPrice = useMemo(() => {
+    const avg = prices.reduce((sum, p) => sum + p.price, 0) / prices.length;
+    return convertPrice(avg);
+  }, [prices, convertPrice]);
+  
+  const highest = useMemo(() => {
+    return prices.reduce((max, p) => p.price > max.price ? p : max, prices[0]);
+  }, [prices]);
+  
+  const lowest = useMemo(() => {
+    return prices.reduce((min, p) => p.price < min.price ? p : min, prices[0]);
+  }, [prices]);
+  
+  const mostChanged = useMemo(() => {
+    return prices.reduce((max, p) => Math.abs(p.changePercent) > Math.abs(max.changePercent) ? p : max, prices[0]);
+  }, [prices]);
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
-        <p className="text-xs text-slate-400 mb-1">ราคาเฉลี่ย</p>
-        <p className="font-jetbrains text-xl font-bold text-slate-100">${avgPrice.toFixed(2)}</p>
+        <p className="text-xs text-slate-400 mb-1">{t.averagePrice}</p>
+        <p className="font-jetbrains text-xl font-bold text-slate-100">{currency.symbol}{avgPrice.toFixed(2)}</p>
       </div>
       <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
-        <p className="text-xs text-slate-400 mb-1">สูงสุด</p>
+        <p className="text-xs text-slate-400 mb-1">{t.highestPrice}</p>
         <p className="font-jetbrains text-xl font-bold text-emerald-400 flex items-center gap-2">
-          {highest.flag} ${highest.price.toFixed(2)}
+          {highest.flag} {currency.symbol}{convertPrice(highest.price).toFixed(2)}
         </p>
       </div>
       <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
-        <p className="text-xs text-slate-400 mb-1">ต่ำสุด</p>
+        <p className="text-xs text-slate-400 mb-1">{t.lowestPrice}</p>
         <p className="font-jetbrains text-xl font-bold text-red-400 flex items-center gap-2">
-          {lowest.flag} ${lowest.price.toFixed(2)}
+          {lowest.flag} {currency.symbol}{convertPrice(lowest.price).toFixed(2)}
         </p>
       </div>
       <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
-        <p className="text-xs text-slate-400 mb-1">ผันผวนมากที่สุด</p>
+        <p className="text-xs text-slate-400 mb-1">{t.mostVolatile}</p>
         <p className="font-jetbrains text-xl font-bold text-amber-400 flex items-center gap-2">
           {mostChanged.flag} {Math.abs(mostChanged.changePercent).toFixed(2)}%
         </p>
@@ -416,6 +446,7 @@ function StatsSummary({ prices }: { prices: OilPrice[] }) {
 }
 
 export default function Home() {
+  const { currency, t, setPriceTrend } = useApp();
   const [prices, setPrices] = useState<OilPrice[]>(initialOilData);
   const [refined, setRefined] = useState<OilPrice[]>(refinedProducts);
   const [news, setNews] = useState<OilNews[]>(initialNews);
@@ -657,34 +688,35 @@ export default function Home() {
               </div>
               <div>
                 <h1 className="font-outfit text-2xl font-bold bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
-                  ราคาน้ำมันโลก
+                  {t.siteTitle}
                 </h1>
-                <p className="text-xs text-slate-400">ราคาน้ำมันดิบและผลิตภัณฑ์จากตลาดหลักทั่วโลก</p>
+                <p className="text-xs text-slate-400">{t.siteDescription}</p>
               </div>
             </div>
             
             <div className="flex items-center gap-4">
+              <SettingsPanel />
               <Link
                 href="/login"
                 className="px-4 py-2 rounded-lg text-sm font-medium bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 transition-all"
               >
-                เข้าสู่ระบบ
+                {t.login}
               </Link>
               <div className="text-right hidden sm:block">
-                <p className="text-xs text-slate-400">อัปเดตล่าสุด</p>
+                <p className="text-xs text-slate-400">{t.lastUpdate}</p>
                 <p className="font-mono text-sm text-slate-300">
                   {lastUpdate.toLocaleTimeString('th-TH')}
                 </p>
               </div>
               <div className="text-right hidden md:block">
-                <p className="text-xs text-slate-400">อัปเดตทุก</p>
+                <p className="text-xs text-slate-400">{t.updateEvery}</p>
                 <div className="flex items-center justify-end gap-2">
-                  <p className="font-mono text-sm text-amber-400">{updateInterval}วินาที</p>
+                  <p className="font-mono text-sm text-amber-400">{updateInterval}{t.seconds}</p>
                   <select
                     value={updateInterval}
                     onChange={(e) => handleChangeInterval(Number(e.target.value))}
                     className="text-xs bg-slate-800/60 border border-slate-700/60 rounded px-2 py-1 text-slate-200 focus:outline-none focus:border-amber-500/60"
-                    aria-label="เลือกช่วงเวลาอัปเดตราคา"
+                    aria-label={t.updateInterval}
                   >
                     <option value={1}>1s</option>
                     <option value={2}>2s</option>
@@ -704,7 +736,7 @@ export default function Home() {
                     : "bg-slate-700/50 text-slate-300 border border-slate-600/50 hover:bg-slate-700"
                 }`}
               >
-                {isPaused ? "▶ ดำเนินต่อ" : "⏸ หยุดชั่วคราว"}
+                {isPaused ? `▶ ${t.resume}` : `⏸ ${t.pause}`}
               </button>
             </div>
           </div>
@@ -716,6 +748,8 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <AdSlot position="between-news" />
+        
         {/* Stats Summary */}
         <StatsSummary prices={prices} />
 
@@ -826,13 +860,13 @@ export default function Home() {
         {/* Footer */}
         <footer className="mt-12 pt-6 border-t border-slate-700/50 text-center">
           <p className="text-xs text-slate-500">
-            ราคาเป็นการจำลองเพื่อวัตถุประสงค์ในการสาธิต ข้อมูลอัปเดตทุก {updateInterval} วินาที
+            {t.disclaimer} {updateInterval} {t.seconds}
           </p>
           <p className="text-xs text-slate-600 mt-2">
             หมายเหตุ: ราคาน้ำมันไทยในแท็บ “ผลิตภัณฑ์น้ำมัน” ดึงข้อมูลจริงจากผู้ให้บริการที่มีแหล่งข้อมูลสาธารณะรองรับ และจะแสดงเท่าที่เรียกได้
           </p>
           <p className="text-xs text-slate-600 mt-2">
-            © 2026 ราคาน้ำมันโลก
+            {t.copyright}
           </p>
         </footer>
       </div>
