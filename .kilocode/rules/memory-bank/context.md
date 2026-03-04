@@ -53,6 +53,12 @@
 | `src/app/about/page.tsx` | Public about page | ✅ Complete |
 | `src/app/contact/page.tsx` | Public contact page | ✅ Complete |
 | `src/app/faq/page.tsx` | Public FAQ page | ✅ Complete |
+| `src/app/auth/login/page.tsx` | Public login page | ✅ Complete |
+| `src/app/auth/register/page.tsx` | Public register page | ✅ Complete |
+| `src/app/auth/forgot-password/page.tsx` | Public forgot password page | ✅ Complete |
+| `src/app/admin/users/page.tsx` | Admin user management | ✅ Complete |
+| `src/app/api/news/route.ts` | News API with real sources | ✅ Complete |
+| `src/app/api/prices/route.ts` | Prices API with EIA support | ✅ Complete |
 | `src/lib/auth.ts` | Authentication utilities | ✅ Complete |
 | `src/lib/translations.ts` | Multi-language translations | ✅ Complete |
 | `src/lib/app-context.tsx` | App context provider | ✅ Complete |
@@ -117,3 +123,4 @@
 | 2026-03-03 | Added real news API, optional real WTI/Brent API, Thai retail fuel types, and encrypted session cookie |
 | 2026-03-03 | Expanded Thai retail fuel list (incl. Diesel 95/B10/Premium) and grouped THB vs USD refined products |
 | 2026-03-04 | Added multi-language support (8 languages), multi-currency support, language/currency selectors, advertisement slots, public pages (About, Contact, FAQ), and enhanced admin settings |
+| 2026-03-04 | Added real news sources (GDELT, Reuters RSS, EIA), public auth pages (login, register, forgot-password), and admin user management page |
