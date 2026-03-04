@@ -42,6 +42,10 @@
 - [x] Create /api/natural-gas endpoint with EIA data for global natural gas prices
 - [x] Create /api/thai-energy endpoint with EPPO data for Thai energy prices
 - [x] Add Natural Gas tab to main page with green/emerald theme
+- [x] Enhance admin login page with clear branding and link to public user login
+- [x] Create Natural Gas admin page for managing global and Thai energy prices
+- [x] Add Natural Gas navigation to admin layout
+- [x] Enhance admin dashboard with more stats and notifications
 
 ## Current Structure
 
@@ -54,6 +58,7 @@
 | `src/app/admin/layout.tsx` | Admin layout with navigation | ✅ Complete |
 | `src/app/admin/dashboard/page.tsx` | Dashboard overview (Thai) | ✅ Complete |
 | `src/app/admin/prices/page.tsx` | Oil prices management (Thai) | ✅ Complete |
+| `src/app/admin/natural-gas/page.tsx` | Natural gas & Thai energy management | ✅ Complete |
 | `src/app/admin/settings/page.tsx` | System settings (Thai) | ✅ Complete |
 | `src/app/about/page.tsx` | Public about page | ✅ Complete |
 | `src/app/contact/page.tsx` | Public contact page | ✅ Complete |
@@ -133,3 +138,4 @@
 | 2026-03-04 | Added real news sources (GDELT, Reuters RSS, EIA), public auth pages (login, register, forgot-password), and admin user management page |
 | 2026-03-04 | Added Thai/International news filter to API and UI with filter buttons |
 | 2026-03-04 | Added natural gas prices feature with global (Henry Hub, TTF, JKM) and Thai (LPG, NGV, CNG, Electricity) prices |
+| 2026-03-04 | Enhanced admin panel: separate admin/public login, natural gas management page, dashboard with more stats and notifications |
