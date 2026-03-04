@@ -329,7 +329,10 @@ function getFallbackNews(): NewsItem[] {
   ];
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const category = searchParams.get("category") || "all";
+  
   try {
     // Fetch from multiple real sources in parallel
     const [gdeltNews, eiaNews, rssNews] = await Promise.all([
@@ -350,20 +353,57 @@ export async function GET() {
       }
     }
     
+    // Filter by category if requested
+    let filteredNews = uniqueNews;
+    if (category === "thai") {
+      filteredNews = uniqueNews.filter(item => 
+        item.tag.includes("🇹🇭") || 
+        item.source.includes("กรุงเทพ") ||
+        item.source.includes("Bangkok") ||
+        item.source.includes("Thailand") ||
+        item.credit.includes("กรุงเทพ")
+      );
+    } else if (category === "international") {
+      filteredNews = uniqueNews.filter(item => 
+        !item.tag.includes("🇹🇭") && 
+        !item.source.includes("กรุงเทพ") &&
+        !item.source.includes("Bangkok") &&
+        !item.source.includes("Thailand") &&
+        !item.credit.includes("กรุงเทพ")
+      );
+    }
+    
     // If we have enough real news, use it
-    if (uniqueNews.length >= 4) {
+    if (filteredNews.length >= 4 || (category !== "all" && uniqueNews.length >= 4)) {
       return NextResponse.json({ 
-        items: uniqueNews.slice(0, 12),
+        items: filteredNews.slice(0, 12),
         source: "Real-time feeds (GDELT, Reuters, EIA)",
+        category: category,
         credit: "News sources: GDELT Project (gdeltproject.org), Reuters (reuters.com), U.S. Energy Information Administration (eia.gov), Bloomberg (bloomberg.com), CNBC (cnbc.com), Financial Times (ft.com), Wall Street Journal (wsj.com), กรุงเทพธุรกิจ (bangkokbiznews.com)",
       });
     }
     
     // Return fallback with real attribution
-    const fallback = getFallbackNews();
+    let fallback = getFallbackNews();
+    if (category === "thai") {
+      fallback = fallback.filter(item => 
+        item.tag.includes("🇹🇭") || 
+        item.source.includes("กรุงเทพ") ||
+        item.source.includes("Bangkok") ||
+        item.source.includes("Thailand")
+      );
+    } else if (category === "international") {
+      fallback = fallback.filter(item => 
+        !item.tag.includes("🇹🇭") && 
+        !item.source.includes("กรุงเทพ") &&
+        !item.source.includes("Bangkok") &&
+        !item.source.includes("Thailand")
+      );
+    }
     return NextResponse.json({
       items: fallback,
       source: "Verified news sources",
+      category: category,
       credit: "Attribution: Reuters, Bloomberg, EIA, CNBC, Financial Times, Wall Street Journal, กรุงเทพธุรกิจ",
     });
   } catch (error) {
@@ -374,6 +414,7 @@ export async function GET() {
     return NextResponse.json({
       items: fallback,
       source: "Verified news sources (fallback)",
+      category: category,
       credit: "Attribution: Reuters, Bloomberg, EIA, CNBC, Financial Times, Wall Street Journal, กรุงเทพธุรกิจ",
     });
   }

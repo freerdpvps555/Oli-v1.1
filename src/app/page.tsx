@@ -455,6 +455,7 @@ export default function Home() {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [selectedOil, setSelectedOil] = useState<OilPrice | null>(null);
   const [activeTab, setActiveTab] = useState<"crude" | "refined">("crude");
+  const [newsCategory, setNewsCategory] = useState<"all" | "thai" | "international">("all");
 
   const thaiRefined = refined.filter((p) => p.country === "TH" || p.type === "Thailand Retail");
   const globalRefined = refined.filter((p) => !(p.country === "TH" || p.type === "Thailand Retail"));
@@ -476,7 +477,7 @@ export default function Home() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch("/api/news", { cache: "no-store" });
+        const res = await fetch(`/api/news?category=${newsCategory}`, { cache: "no-store" });
         if (!res.ok) return;
         const data = (await res.json()) as { items?: OilNews[] };
         if (!cancelled && Array.isArray(data.items)) {
@@ -489,7 +490,7 @@ export default function Home() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [newsCategory]);
 
   // Fetch Thailand retail prices (real data by brand).
   useEffect(() => {
@@ -767,6 +768,40 @@ export default function Home() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            {/* Category Filter */}
+            <div className="col-span-full flex items-center gap-2 mb-4">
+              <span className="text-sm text-slate-400 mr-2">กรองข่าว:</span>
+              <button
+                onClick={() => setNewsCategory("all")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  newsCategory === "all"
+                    ? "bg-amber-500/20 text-amber-400 border border-amber-500/50"
+                    : "bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50"
+                }`}
+              >
+                📰 ทั้งหมด
+              </button>
+              <button
+                onClick={() => setNewsCategory("thai")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  newsCategory === "thai"
+                    ? "bg-red-500/20 text-red-400 border border-red-500/50"
+                    : "bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50"
+                }`}
+              >
+                🇹🇭 ข่าวไทย
+              </button>
+              <button
+                onClick={() => setNewsCategory("international")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  newsCategory === "international"
+                    ? "bg-blue-500/20 text-blue-400 border border-blue-500/50"
+                    : "bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50"
+                }`}
+              >
+                🌍 ข่าวต่างประเทศ
+              </button>
+            </div>
             {news.length > 0 ? (
               news.map((item) => <NewsCard key={item.id} news={item} />)
             ) : (
