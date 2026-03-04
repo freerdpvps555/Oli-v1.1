@@ -37,6 +37,7 @@
 - [x] Create public Contact page with form
 - [x] Create public FAQ page with accordion
 - [x] Enhance admin settings page with language/currency settings, notifications, and data export/import
+- [x] Add Thai/International news filter to API and UI with filter buttons
 
 ## Current Structure
 
@@ -124,3 +125,4 @@
 | 2026-03-03 | Expanded Thai retail fuel list (incl. Diesel 95/B10/Premium) and grouped THB vs USD refined products |
 | 2026-03-04 | Added multi-language support (8 languages), multi-currency support, language/currency selectors, advertisement slots, public pages (About, Contact, FAQ), and enhanced admin settings |
 | 2026-03-04 | Added real news sources (GDELT, Reuters RSS, EIA), public auth pages (login, register, forgot-password), and admin user management page |
+| 2026-03-04 | Added Thai/International news filter to API and UI with filter buttons |
