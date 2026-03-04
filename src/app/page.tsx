@@ -9,6 +9,7 @@ interface OilPrice {
   flag: string;
   name: string;
   type: string;
+  brand?: string;
   currencySymbol?: string;
   unitLabel?: string;
   price: number;
@@ -50,20 +51,8 @@ const initialOilData: OilPrice[] = [
 ];
 
 const refinedProducts: OilPrice[] = [
-  // Thailand retail (แสดงเป็นเงินบาททั้งหมด; ค่าเป็น placeholder จนกว่าจะต่อแหล่งข้อมูลจริง)
-  { id: "th-gasohol91", country: "TH", flag: "🇹🇭", name: "แก๊สโซฮอล์ 91", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 37.48, previousPrice: 37.48, change: 0, changePercent: 0, high24h: 37.80, low24h: 37.20, high52w: 44.00, low52w: 31.50, volume: "-", openInterest: "-", history: [37.40, 37.45, 37.46, 37.44, 37.47, 37.49, 37.48], lastUpdate: new Date() },
-  { id: "th-gasohol95", country: "TH", flag: "🇹🇭", name: "แก๊สโซฮอล์ 95", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 38.15, previousPrice: 38.15, change: 0, changePercent: 0, high24h: 38.50, low24h: 37.80, high52w: 45.00, low52w: 32.20, volume: "-", openInterest: "-", history: [38.10, 38.12, 38.18, 38.14, 38.13, 38.16, 38.15], lastUpdate: new Date() },
-  { id: "th-gasohol95-premium", country: "TH", flag: "🇹🇭", name: "แก๊สโซฮอล์ 95 (พรีเมียม)", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 49.90, previousPrice: 49.90, change: 0, changePercent: 0, high24h: 50.30, low24h: 49.50, high52w: 58.00, low52w: 43.00, volume: "-", openInterest: "-", history: [49.70, 49.80, 49.95, 49.85, 49.92, 49.88, 49.90], lastUpdate: new Date() },
-  { id: "th-benzine95", country: "TH", flag: "🇹🇭", name: "เบนซิน 95", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 45.50, previousPrice: 45.50, change: 0, changePercent: 0, high24h: 45.80, low24h: 45.20, high52w: 52.00, low52w: 39.00, volume: "-", openInterest: "-", history: [45.40, 45.45, 45.52, 45.48, 45.47, 45.51, 45.50], lastUpdate: new Date() },
-  { id: "th-benzine95-premium", country: "TH", flag: "🇹🇭", name: "เบนซิน 95 (พรีเมียม)", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 52.90, previousPrice: 52.90, change: 0, changePercent: 0, high24h: 53.30, low24h: 52.50, high52w: 62.00, low52w: 46.00, volume: "-", openInterest: "-", history: [52.70, 52.80, 52.95, 52.85, 52.92, 52.88, 52.90], lastUpdate: new Date() },
-  { id: "th-diesel", country: "TH", flag: "🇹🇭", name: "ดีเซล B7", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 32.94, previousPrice: 32.94, change: 0, changePercent: 0, high24h: 33.10, low24h: 32.70, high52w: 38.50, low52w: 29.00, volume: "-", openInterest: "-", history: [32.90, 32.92, 32.96, 32.93, 32.95, 32.94, 32.94], lastUpdate: new Date() },
-  { id: "th-diesel-b10", country: "TH", flag: "🇹🇭", name: "ดีเซล B10", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 31.94, previousPrice: 31.94, change: 0, changePercent: 0, high24h: 32.10, low24h: 31.70, high52w: 37.50, low52w: 28.00, volume: "-", openInterest: "-", history: [31.90, 31.92, 31.96, 31.93, 31.95, 31.94, 31.94], lastUpdate: new Date() },
-  { id: "th-diesel-premium", country: "TH", flag: "🇹🇭", name: "ดีเซลพรีเมียม B7", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 44.90, previousPrice: 44.90, change: 0, changePercent: 0, high24h: 45.20, low24h: 44.50, high52w: 52.00, low52w: 39.50, volume: "-", openInterest: "-", history: [44.80, 44.85, 44.92, 44.88, 44.91, 44.89, 44.90], lastUpdate: new Date() },
-  { id: "th-diesel95", country: "TH", flag: "🇹🇭", name: "ดีเซล 95", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 33.90, previousPrice: 33.90, change: 0, changePercent: 0, high24h: 34.20, low24h: 33.60, high52w: 40.50, low52w: 29.80, volume: "-", openInterest: "-", history: [33.70, 33.78, 33.85, 33.80, 33.88, 33.92, 33.90], lastUpdate: new Date() },
-  { id: "th-e20", country: "TH", flag: "🇹🇭", name: "แก๊สโซฮอล์ E20", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 35.44, previousPrice: 35.44, change: 0, changePercent: 0, high24h: 35.80, low24h: 35.10, high52w: 42.00, low52w: 29.50, volume: "-", openInterest: "-", history: [35.38, 35.40, 35.46, 35.42, 35.45, 35.43, 35.44], lastUpdate: new Date() },
-  { id: "th-e85", country: "TH", flag: "🇹🇭", name: "แก๊สโซฮอล์ E85", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 33.19, previousPrice: 33.19, change: 0, changePercent: 0, high24h: 33.50, low24h: 32.90, high52w: 40.00, low52w: 27.80, volume: "-", openInterest: "-", history: [33.10, 33.15, 33.20, 33.18, 33.21, 33.19, 33.19], lastUpdate: new Date() },
-  { id: "th-lpg", country: "TH", flag: "🇹🇭", name: "LPG", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/กก.", price: 22.80, previousPrice: 22.80, change: 0, changePercent: 0, high24h: 23.10, low24h: 22.50, high52w: 30.00, low52w: 19.00, volume: "-", openInterest: "-", history: [22.70, 22.75, 22.82, 22.78, 22.80, 22.81, 22.80], lastUpdate: new Date() },
-  { id: "th-ngv", country: "TH", flag: "🇹🇭", name: "NGV", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/กก.", price: 18.59, previousPrice: 18.59, change: 0, changePercent: 0, high24h: 18.80, low24h: 18.30, high52w: 22.00, low52w: 16.00, volume: "-", openInterest: "-", history: [18.50, 18.55, 18.60, 18.58, 18.61, 18.59, 18.59], lastUpdate: new Date() },
+  // Thailand retail (แสดงเป็นเงินบาท; จะถูกแทนที่ด้วยข้อมูลจริงจาก /api/thai-retail)
+  { id: "th-placeholder", country: "TH", flag: "🇹🇭", name: "กำลังโหลดราคาน้ำมันไทย...", type: "Thailand Retail", currencySymbol: "฿", unitLabel: "บาท/ลิตร", price: 0, previousPrice: 0, change: 0, changePercent: 0, high24h: 0, low24h: 0, high52w: 0, low52w: 0, volume: "-", openInterest: "-", history: [0, 0, 0, 0, 0, 0, 0], lastUpdate: new Date() },
 
   // Global refined products (USD benchmarks)
   { id: "gasoline", country: "US", flag: "🇺🇸", name: "Gasoline (RBOB)", type: "Refined Product", price: 2.45, previousPrice: 2.45, change: 0, changePercent: 0, high24h: 2.52, low24h: 2.38, high52w: 3.20, low52w: 1.85, volume: "425K", openInterest: "580K", history: [2.40, 2.42, 2.44, 2.41, 2.43, 2.46, 2.45], lastUpdate: new Date() },
@@ -239,6 +228,9 @@ function RefinedProductCard({ product, isUpdating }: { product: OilPrice; isUpda
           </div>
           <div>
             <h4 className="font-outfit font-medium text-slate-100 text-sm">{product.name}</h4>
+            {product.brand ? (
+              <p className="text-[10px] text-slate-400 mt-0.5">{product.brand}</p>
+            ) : null}
             <p className="text-xs text-cyan-400">{product.type}</p>
           </div>
         </div>
@@ -463,6 +455,74 @@ export default function Home() {
         // Keep UI usable even when news fetch fails
       }
     })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Fetch Thailand retail prices (real data by brand).
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await fetch("/api/thai-retail", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          brands?: Array<{
+            brand: string;
+            items: Array<{
+              id: string;
+              name: string;
+              price: number;
+              unitLabel: string;
+              currencySymbol: string;
+            }>;
+          }>;
+        };
+
+        if (cancelled || !Array.isArray(data.brands) || data.brands.length === 0) return;
+
+        const now = new Date();
+        const items: OilPrice[] = data.brands.flatMap((b) =>
+          (b.items ?? []).map((it) => {
+            const price = Number(it.price);
+            return {
+              id: `th-${b.brand.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${it.id}`,
+              country: "TH",
+              flag: "🇹🇭",
+              name: it.name,
+              type: "Thailand Retail",
+              brand: b.brand,
+              currencySymbol: "฿",
+              unitLabel: it.unitLabel || "บาท/ลิตร",
+              price,
+              previousPrice: price,
+              change: 0,
+              changePercent: 0,
+              high24h: price,
+              low24h: price,
+              high52w: price,
+              low52w: price,
+              volume: "-",
+              openInterest: "-",
+              history: [price, price, price, price, price, price, price],
+              lastUpdate: now,
+            };
+          })
+        );
+
+        setRefined((prev) => {
+          const globalOnly = prev.filter(
+            (p) => !(p.country === "TH" || p.type === "Thailand Retail")
+          );
+          return [...items, ...globalOnly];
+        });
+      } catch {
+        // Keep UI usable if Thai retail fetch fails.
+      }
+    })();
+
     return () => {
       cancelled = true;
     };
@@ -769,7 +829,7 @@ export default function Home() {
             ราคาเป็นการจำลองเพื่อวัตถุประสงค์ในการสาธิต ข้อมูลอัปเดตทุก {updateInterval} วินาที
           </p>
           <p className="text-xs text-slate-600 mt-2">
-            หมายเหตุ: ราคาน้ำมันไทยในแท็บ “ผลิตภัณฑ์น้ำมัน” เป็นราคา placeholder จนกว่าจะเชื่อมต่อผู้ให้บริการข้อมูลจริง
+            หมายเหตุ: ราคาน้ำมันไทยในแท็บ “ผลิตภัณฑ์น้ำมัน” ดึงข้อมูลจริงจากผู้ให้บริการที่มีแหล่งข้อมูลสาธารณะรองรับ และจะแสดงเท่าที่เรียกได้
           </p>
           <p className="text-xs text-slate-600 mt-2">
             © 2026 ราคาน้ำมันโลก
