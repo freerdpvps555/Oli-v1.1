@@ -39,6 +39,22 @@ interface OilNews {
   url?: string;
 }
 
+interface NaturalGasPrice {
+  id: string;
+  name: string;
+  country: string;
+  flag: string;
+  type: string;
+  price: number;
+  previousPrice: number;
+  change: number;
+  changePercent: number;
+  unit: string;
+  source: string;
+  lastUpdate: Date;
+  history?: number[];
+}
+
 const initialOilData: OilPrice[] = [
   { id: "wti", country: "US", flag: "🇺🇸", name: "WTI Crude", type: "Crude Oil", price: 75.42, previousPrice: 75.42, change: 0, changePercent: 0, high24h: 76.80, low24h: 74.20, high52w: 95.00, low52w: 62.00, volume: "892K", openInterest: "1.2M", history: [74.50, 75.10, 74.80, 75.30, 75.60, 75.20, 75.42], lastUpdate: new Date() },
   { id: "brent", country: "UK", flag: "🇬🇧", name: "Brent Crude", type: "Crude Oil", price: 79.18, previousPrice: 79.18, change: 0, changePercent: 0, high24h: 80.50, low24h: 78.10, high52w: 100.00, low52w: 65.00, volume: "756K", openInterest: "980K", history: [78.20, 78.90, 79.00, 78.70, 79.20, 79.50, 79.18], lastUpdate: new Date() },
@@ -63,6 +79,19 @@ const refinedProducts: OilPrice[] = [
   { id: "heating", country: "US", flag: "🇺🇸", name: "Heating Oil", type: "Refined Product", price: 2.52, previousPrice: 2.52, change: 0, changePercent: 0, high24h: 2.60, low24h: 2.45, high52w: 3.10, low52w: 1.95, volume: "180K", openInterest: "240K", history: [2.48, 2.50, 2.53, 2.49, 2.51, 2.54, 2.52], lastUpdate: new Date() },
   { id: "jetfuel", country: "US", flag: "🇺🇸", name: "Jet Fuel", type: "Refined Product", price: 2.85, previousPrice: 2.85, change: 0, changePercent: 0, high24h: 2.95, low24h: 2.75, high52w: 3.60, low52w: 2.30, volume: "145K", openInterest: "190K", history: [2.80, 2.82, 2.87, 2.83, 2.84, 2.86, 2.85], lastUpdate: new Date() },
   { id: "propane", country: "US", flag: "🇺🇸", name: "Propane", type: "Refined Product", price: 0.92, previousPrice: 0.92, change: 0, changePercent: 0, high24h: 0.98, low24h: 0.88, high52w: 1.20, low52w: 0.65, volume: "95K", openInterest: "130K", history: [0.90, 0.91, 0.93, 0.89, 0.92, 0.94, 0.92], lastUpdate: new Date() },
+];
+
+const initialNaturalGasData: NaturalGasPrice[] = [
+  { id: "henry-hub", name: "Henry Hub", country: "US", flag: "🇺🇸", type: "Natural Gas", price: 2.85, previousPrice: 2.85, change: 0, changePercent: 0, unit: "USD/MMBtu", source: "EIA", lastUpdate: new Date() },
+  { id: "ttf", name: "TTF (Netherlands)", country: "NL", flag: "🇳🇱", type: "Natural Gas", price: 5.85, previousPrice: 5.85, change: 0, changePercent: 0, unit: "USD/MMBtu", source: "Estimated", lastUpdate: new Date() },
+  { id: "jkm", name: "JKM (Japan/Korea)", country: "JP", flag: "🇯🇵", type: "Natural Gas", price: 7.85, previousPrice: 7.85, change: 0, changePercent: 0, unit: "USD/MMBtu", source: "Estimated", lastUpdate: new Date() },
+];
+
+const initialThaiEnergyData: NaturalGasPrice[] = [
+  { id: "lpg-household", name: "LPG (Household)", country: "TH", flag: "🇹🇭", type: "LPG", price: 385.62, previousPrice: 385.62, change: 0, changePercent: 0, unit: "บาท/15กก.", source: "EPPO", lastUpdate: new Date() },
+  { id: "lpg-vehicle", name: "LPG (Vehicle)", country: "TH", flag: "🇹🇭", type: "LPG", price: 21.68, previousPrice: 21.68, change: 0, changePercent: 0, unit: "บาท/กก.", source: "EPPO", lastUpdate: new Date() },
+  { id: "ngv", name: "NGV", country: "TH", flag: "🇹🇭", type: "Natural Gas", price: 15.59, previousPrice: 15.59, change: 0, changePercent: 0, unit: "บาท/กก.", source: "EPPO", lastUpdate: new Date() },
+  { id: "cng", name: "CNG", country: "TH", flag: "🇹🇭", type: "Natural Gas", price: 18.00, previousPrice: 18.00, change: 0, changePercent: 0, unit: "บาท/กก.", source: "EPPO", lastUpdate: new Date() },
 ];
 
 const initialNews: OilNews[] = [];
@@ -249,6 +278,41 @@ function RefinedProductCard({ product, isUpdating }: { product: OilPrice; isUpda
         {currency.symbol}{displayPrice.toFixed(2)}
         {product.unitLabel ? <span className="ml-2 text-xs font-normal text-slate-400">{product.unitLabel}</span> : null}
       </p>
+    </div>
+  );
+}
+
+function NaturalGasCard({ gas, isUpdating }: { gas: NaturalGasPrice; isUpdating: boolean }) {
+  const { currency, convertPrice, t } = useApp();
+  const trendColor = getTrendColor(gas.change);
+  const displayPrice = useMemo(() => convertPrice(gas.price), [convertPrice, gas.price]);
+  
+  return (
+    <div 
+      className={`relative overflow-hidden rounded-xl border border-slate-700/50 bg-gradient-to-br from-emerald-900/30 to-slate-900/50 backdrop-blur-sm p-4 transition-all duration-300 hover:scale-[1.02] hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/10 ${isUpdating ? 'ring-2 ring-emerald-500/50' : ''}`}
+    >
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+            <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+            </svg>
+          </div>
+          <div>
+            <h4 className="font-outfit font-medium text-slate-100 text-sm">{gas.name}</h4>
+            <p className="text-xs text-emerald-400">{gas.country === "TH" ? "🇹🇭 ไทย" : gas.flag}</p>
+          </div>
+        </div>
+        <div className={`px-2 py-1 rounded-full text-xs font-mono ${getTrendBg(gas.change)}`}>
+          <span className={trendColor}>{getTrendIcon(gas.change)} {Math.abs(gas.changePercent).toFixed(2)}%</span>
+        </div>
+      </div>
+      <p className="font-jetbrains text-2xl font-bold text-slate-50">
+        {gas.country === "TH" ? "฿" : "$"}{gas.price.toFixed(2)}
+        <span className="ml-2 text-xs font-normal text-slate-400">{gas.unit}</span>
+      </p>
+      <p className="text-[10px] text-slate-500 mt-1">{gas.source}</p>
     </div>
   );
 }
@@ -454,8 +518,10 @@ export default function Home() {
   const [isPaused, setIsPaused] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [selectedOil, setSelectedOil] = useState<OilPrice | null>(null);
-  const [activeTab, setActiveTab] = useState<"crude" | "refined">("crude");
+  const [activeTab, setActiveTab] = useState<"crude" | "refined" | "natural-gas">("crude");
   const [newsCategory, setNewsCategory] = useState<"all" | "thai" | "international">("all");
+  const [naturalGasPrices, setNaturalGasPrices] = useState<NaturalGasPrice[]>(initialNaturalGasData);
+  const [thaiEnergyPrices, setThaiEnergyPrices] = useState<NaturalGasPrice[]>(initialThaiEnergyData);
 
   const thaiRefined = refined.filter((p) => p.country === "TH" || p.type === "Thailand Retail");
   const globalRefined = refined.filter((p) => !(p.country === "TH" || p.type === "Thailand Retail"));
@@ -596,6 +662,110 @@ export default function Home() {
         );
       } catch {
         // Keep UI usable when real-price fetch fails.
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Fetch natural gas prices from API
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await fetch("/api/natural-gas", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          items?: Array<{
+            id: string;
+            name: string;
+            country: string;
+            flag: string;
+            type: string;
+            price: number;
+            previousPrice: number;
+            unit: string;
+            source: string;
+          }>;
+        };
+
+        if (cancelled || !Array.isArray(data.items) || data.items.length === 0) return;
+
+        setNaturalGasPrices((prev) =>
+          data.items!.map((item) => {
+            const existing = prev.find((p) => p.id === item.id);
+            const change = item.price - item.previousPrice;
+            const changePercent = (change / item.previousPrice) * 100;
+            return {
+              ...item,
+              change: Math.round(change * 100) / 100,
+              changePercent: Math.round(changePercent * 100) / 100,
+              lastUpdate: new Date(),
+              history: existing?.history || [item.price, item.price, item.price, item.price, item.price, item.price, item.price],
+            };
+          })
+        );
+      } catch {
+        // Keep UI usable when natural gas fetch fails
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Fetch Thai energy prices (LPG, NGV, CNG, Electricity) from EPPO
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await fetch("/api/thai-energy", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          items?: Array<{
+            id: string;
+            name: string;
+            nameThai?: string;
+            price: number;
+            previousPrice: number;
+            unit: string;
+            currency: string;
+            currencySymbol: string;
+            type: string;
+          }>;
+        };
+
+        if (cancelled || !Array.isArray(data.items) || data.items.length === 0) return;
+
+        setThaiEnergyPrices((prev) =>
+          data.items!.map((item) => {
+            const existing = prev.find((p) => p.id === item.id);
+            const change = item.price - item.previousPrice;
+            const changePercent = item.previousPrice !== 0 ? (change / item.previousPrice) * 100 : 0;
+            return {
+              id: item.id,
+              name: item.name,
+              country: "TH",
+              flag: "🇹🇭",
+              type: item.type,
+              price: item.price,
+              previousPrice: item.previousPrice,
+              change: Math.round(change * 100) / 100,
+              changePercent: Math.round(changePercent * 100) / 100,
+              unit: item.unit,
+              source: item.currency === "USD" ? "EIA" : "EPPO",
+              lastUpdate: new Date(),
+              history: existing?.history || [item.price, item.price, item.price, item.price, item.price, item.price, item.price],
+            };
+          })
+        );
+      } catch {
+        // Keep UI usable when Thai energy fetch fails
       }
     })();
 
@@ -834,6 +1004,16 @@ export default function Home() {
           >
             ผลิตภัณฑ์น้ำมัน
           </button>
+          <button
+            onClick={() => setActiveTab("natural-gas")}
+            className={`px-6 py-3 rounded-xl font-medium transition-all ${
+              activeTab === "natural-gas"
+                ? "bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20"
+                : "bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 hover:text-slate-300"
+            }`}
+          >
+            ⚡ ก๊าซธรรมชาติ
+          </button>
         </div>
 
         {/* Price Grid */}
@@ -848,7 +1028,7 @@ export default function Home() {
               />
             ))}
           </div>
-        ) : (
+        ) : activeTab === "refined" ? (
           <div className="space-y-8">
             <section>
               <div className="flex items-center justify-between mb-3">
@@ -889,6 +1069,48 @@ export default function Home() {
                 </div>
               </section>
             ) : null}
+          </div>
+        ) : (
+          <div className="space-y-8">
+            {/* Global Natural Gas Prices */}
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h3 className="font-outfit text-base font-semibold text-slate-100">ราคาก๊าซธรรมชาติตลาดสากล</h3>
+                  <p className="text-xs text-slate-400">ราคาก๊าซธรรมชาติจากตลาดโลก (USD/MMBtu)</p>
+                </div>
+                <span className="text-xs font-mono text-emerald-400">USD</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {naturalGasPrices.map((gas) => (
+                  <NaturalGasCard
+                    key={gas.id}
+                    gas={gas}
+                    isUpdating={updatingId === gas.id}
+                  />
+                ))}
+              </div>
+            </section>
+
+            {/* Thai Energy Prices (LPG, NGV, CNG, Electricity) */}
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h3 className="font-outfit text-base font-semibold text-slate-100">พลังงานของไทย</h3>
+                  <p className="text-xs text-slate-400">ราคาพลังงานในประเทศไทย (EPPO)</p>
+                </div>
+                <span className="text-xs font-mono text-emerald-400">THB</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {thaiEnergyPrices.map((energy) => (
+                  <NaturalGasCard
+                    key={energy.id}
+                    gas={energy}
+                    isUpdating={updatingId === energy.id}
+                  />
+                ))}
+              </div>
+            </section>
           </div>
         )}
 
