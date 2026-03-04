@@ -38,6 +38,10 @@
 - [x] Create public FAQ page with accordion
 - [x] Enhance admin settings page with language/currency settings, notifications, and data export/import
 - [x] Add Thai/International news filter to API and UI with filter buttons
+- [x] Add natural gas prices feature with global (Henry Hub, TTF, JKM) and Thai (LPG, NGV, CNG) prices
+- [x] Create /api/natural-gas endpoint with EIA data for global natural gas prices
+- [x] Create /api/thai-energy endpoint with EPPO data for Thai energy prices
+- [x] Add Natural Gas tab to main page with green/emerald theme
 
 ## Current Structure
 
@@ -60,6 +64,8 @@
 | `src/app/admin/users/page.tsx` | Admin user management | ✅ Complete |
 | `src/app/api/news/route.ts` | News API with real sources | ✅ Complete |
 | `src/app/api/prices/route.ts` | Prices API with EIA support | ✅ Complete |
+| `src/app/api/natural-gas/route.ts` | Natural Gas API with EIA data | ✅ Complete |
+| `src/app/api/thai-energy/route.ts` | Thai Energy API with EPPO data | ✅ Complete |
 | `src/lib/auth.ts` | Authentication utilities | ✅ Complete |
 | `src/lib/translations.ts` | Multi-language translations | ✅ Complete |
 | `src/lib/app-context.tsx` | App context provider | ✅ Complete |
@@ -126,3 +132,4 @@
 | 2026-03-04 | Added multi-language support (8 languages), multi-currency support, language/currency selectors, advertisement slots, public pages (About, Contact, FAQ), and enhanced admin settings |
 | 2026-03-04 | Added real news sources (GDELT, Reuters RSS, EIA), public auth pages (login, register, forgot-password), and admin user management page |
 | 2026-03-04 | Added Thai/International news filter to API and UI with filter buttons |
+| 2026-03-04 | Added natural gas prices feature with global (Henry Hub, TTF, JKM) and Thai (LPG, NGV, CNG, Electricity) prices |
